@@ -15,3 +15,9 @@ class TeamErrorDto:
     message: str = None
     body: FantasyTeam = None
     error: str = None
+
+@dataclass
+class PlayerFantasyErrorDto:
+    message: str = None
+    body: FantasyTeam = None
+    error: str = None

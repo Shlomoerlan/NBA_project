@@ -88,3 +88,38 @@ def get_player_by_name(player_name):
     )
 
     return player
+
+def check_unique_names_and_positions(players):
+    player_names = [player["player_name"] for player in players]
+    positions = [player["position"] for player in players]
+
+    if len(player_names) != len(set(player_names)):
+        return {"error": "Duplicate player names found"}
+
+    if len(positions) != len(set(positions)):
+        return {"error": "Duplicate positions found"}
+
+    return {"message": "Names and positions are unique"}
+
+def insert_players_if_valid(players):
+
+    validation_result = check_unique_names_and_positions(players)
+    if "error" in validation_result:
+        return validation_result
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    for player in players:
+        cursor.execute("""
+            INSERT INTO players (player_name, team, position, points, games, two_percent, three_percent, atr, ppg_ratio, seasons)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        """, (player["player_name"], player["team"], player["position"], player["points"], player["games"],
+              player["two_percent"], player["three_percent"], player["atr"], player["ppg_ratio"], player["seasons"]))
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    return {"message": "Players inserted successfully"}
+

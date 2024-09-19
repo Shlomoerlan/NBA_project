@@ -14,4 +14,4 @@ players_list2024 = fetch_player_data(api_url2024)
 # insert_players_to_db(players_list2022)
 # insert_players_to_db(players_list2023)
 #
-print(players_list2024)
+# print(players_list2024)

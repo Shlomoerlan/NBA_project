@@ -26,6 +26,5 @@ class FantasyTeam:
     team_name: str
     id: int = None
 
-# {'name': 'best_team', 'players': ["jack", "adam", "dani", "koral", "moshe"]}
 
 
