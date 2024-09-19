@@ -149,6 +149,5 @@ def delete_team_by_id(cursor, team_id):
         DELETE FROM team WHERE id = %s
         RETURNING id
     """, (team_id,))
-
     deleted_team_id = cursor.fetchone()
     return deleted_team_id
