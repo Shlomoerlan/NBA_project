@@ -1,5 +1,5 @@
 from repository.team_repository import create_team, get_team_id, get_team_by_id, get_players_by_team_id, \
-    get_players_by_team_id1
+    get_players_by_team_id1, get_team_by_id1
 from repository.team_player_repository import create_player_fantasy, insert_players_if_valid
 from repository.player_repository import get_player_by_name
 from dto.Error_dto import PlayerFantasyErrorDto, TeamErrorDto
@@ -93,7 +93,7 @@ def compare_teams():
 
     for team_id in team_ids:
 
-        team = get_team_by_id(team_id)
+        team = get_team_by_id1(team_id)
         if not team:
             return jsonify(TeamErrorDto(error=f"Team with ID {team_id} not found")), 404
 

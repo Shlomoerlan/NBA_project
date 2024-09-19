@@ -93,6 +93,23 @@ def get_team_by_id(cursor, team_id):
     return team
 
 
+def get_team_by_id1(team_id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("""
+        SELECT id, team_name
+        FROM team
+        WHERE id = %s
+    """, (team_id,))
+    team = cursor.fetchone()
+    cursor.close()
+    conn.close()
+    if team:
+        return {"team_id": team['id'], "team_name": team['team_name']}
+    else:
+        return None
+
+
 @curry
 def get_players_by_team_id(cursor, team_id):
     cursor.execute("""
@@ -128,5 +145,3 @@ def get_players_by_team_id1(team_id):
              "three_percent": player['three_percent'],
              "atr": player['atr'],
              "ppg_ratio": player['ppg_ratio']} for player in players]
-
-
