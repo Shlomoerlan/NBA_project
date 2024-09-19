@@ -122,7 +122,7 @@ def find_player_by_id(player_id: int):
 def get_player_by_name(player_name):
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM players WHERE player_name = %s", (player_name,))
+    cursor.execute("SELECT * FROM players WHERE player_id = %s", (player_name,))
     player = cursor.fetchone()
     cursor.close()
     conn.close()
@@ -139,7 +139,7 @@ def find_player_by_player_id(player_id: str):
     if player_data:
         return PlayerStats(**player_data)
     return None
-
+print(find_player_by_player_id("Aarohbn Hekhnry"))
 
 @curry
 def update_player(p_id, updated_player):

@@ -4,6 +4,7 @@ from typing import List
 
 @dataclass
 class PlayerFantasy:
+    team_id: int
     player_name: str
     team: str
     position: str
@@ -13,6 +14,7 @@ class PlayerFantasy:
     three_percent: float
     atr: float
     ppg_ratio: float
+    id: int = None
 
     def __post_init__(self):
         if self.games == 0:
@@ -22,4 +24,8 @@ class PlayerFantasy:
 @dataclass
 class FantasyTeam:
     team_name: str
-    players: List[PlayerFantasy]
+    id: int = None
+
+# {'name': 'best_team', 'players': ["jack", "adam", "dani", "koral", "moshe"]}
+
+
