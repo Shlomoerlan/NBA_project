@@ -13,7 +13,6 @@ def calculate_atr(player):
     return player
 
 
-
 @curry
 def calculate_ppg_ratio(player):
     games = player['games']
@@ -55,7 +54,3 @@ def fetch_player_data(api_url: str) -> List[PlayerStats]:
                 )
             )
     )
-
-
-
-

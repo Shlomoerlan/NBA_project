@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 if __name__ == "__main__":
     app.register_blueprint(player_blueprint, url_prefix="/api/players")
-    app.register_blueprint(team_blueprint, url_prefix="/api/team")
+    app.register_blueprint(team_blueprint, url_prefix="/api/teams")
     app.run(debug=True)
 
 

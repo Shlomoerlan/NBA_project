@@ -119,18 +119,22 @@ def find_player_by_id(player_id: int):
 
 
 @curry
-def get_player_by_name(player_name):
+def get_player_by_name(player_name, season=None):
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute("""
-        SELECT * FROM players WHERE player_id = %s
-    """, (player_name,))
+    if season:
+        cursor.execute("""
+            SELECT * FROM players WHERE player_id = %s AND seasons = %s
+        """, (player_name, season))
+    else:
+        cursor.execute("""
+            SELECT * FROM players WHERE player_id = %s
+        """, (player_name,))
+
     player = cursor.fetchone()
     cursor.close()
     conn.close()
     return player
-
-
 
 
 

@@ -33,6 +33,7 @@ def create_player_fantasy_table():
     conn.close()
     print("PlayerFantasy table created successfully!")
 
+
 def create_player_fantasy(team_id, player):
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -75,8 +76,6 @@ def find_player_by_name_and_season(player_name, season):
     return player
 
 
-
-
 def get_player_by_name(player_name):
     seasons = [2024, 2023, 2022]
     player_search_fn = find_player_by_name_and_season(player_name)
@@ -88,6 +87,7 @@ def get_player_by_name(player_name):
     )
 
     return player
+
 
 def check_unique_names_and_positions(players):
     player_names = [player["player_name"] for player in players]
@@ -101,21 +101,31 @@ def check_unique_names_and_positions(players):
 
     return {"message": "Names and positions are unique"}
 
+
 def insert_players_if_valid(players):
-
-    validation_result = check_unique_names_and_positions(players)
-    if "error" in validation_result:
-        return validation_result
-
     conn = get_db_connection()
     cursor = conn.cursor()
 
     for player in players:
+        if not player.get("player_id"):
+            return {"error": f"Player {player.get('player_name', 'Unknown')} is missing player_id"}
+
         cursor.execute("""
-            INSERT INTO players (player_name, team, position, points, games, two_percent, three_percent, atr, ppg_ratio, seasons)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-        """, (player["player_name"], player["team"], player["position"], player["points"], player["games"],
-              player["two_percent"], player["three_percent"], player["atr"], player["ppg_ratio"], player["seasons"]))
+            INSERT INTO players (player_id, player_name, team, position, points, games, two_percent, three_percent, atr, ppg_ratio, seasons)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        """, (
+            player["player_id"],
+            player["player_name"],
+            player["team"],
+            player["position"],
+            player["points"],
+            player["games"],
+            player["two_percent"],
+            player["three_percent"],
+            player["atr"],
+            player["ppg_ratio"],
+            player["seasons"]
+        ))
 
     conn.commit()
     cursor.close()
@@ -123,3 +133,22 @@ def insert_players_if_valid(players):
 
     return {"message": "Players inserted successfully"}
 
+
+@curry
+def delete_team_references(cursor, team_id):
+    cursor.execute("""
+        DELETE FROM players WHERE team_id = %s
+    """, (team_id,))
+
+
+@curry
+def delete_team_by_id(cursor, team_id):
+    delete_team_references(cursor, team_id)
+
+    cursor.execute("""
+        DELETE FROM team WHERE id = %s
+        RETURNING id
+    """, (team_id,))
+
+    deleted_team_id = cursor.fetchone()
+    return deleted_team_id
