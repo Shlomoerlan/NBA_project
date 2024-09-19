@@ -22,11 +22,15 @@ def get1_all_players():
 
 @player_blueprint.route("/player/<int:player_id>", methods=["GET"])
 def get_player_by_id(player_id):
-    player = find_player_by_id(player_id)
-    if player:
-        return jsonify(PlayerErrorDto(body=player)), 200
-    else:
-        return jsonify(PlayerErrorDto(error="Player not found")), 404
+    try:
+        player = find_player_by_id(player_id)
+        if player:
+            return jsonify(PlayerErrorDto(body=player)), 200
+        else:
+            return jsonify(PlayerErrorDto(error="Player not found")), 404
+    except Exception as e:
+        return jsonify(PlayerErrorDto(error=f"An error occurred: {str(e)}")), 500
+
 
 
 @player_blueprint.route("/create", methods=["POST"])
